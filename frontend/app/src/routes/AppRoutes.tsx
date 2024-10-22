@@ -1,6 +1,10 @@
-import { Comment } from "@/types/global";
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Header from "@/components/common/Header";
 import TopPage from "@/pages/user/topPage";
@@ -12,8 +16,39 @@ import CreatePostPage from "@/pages/post/createPage";
 import DetailPostPage from "@/pages/post/detailPage";
 import EditPostPage from "@/pages/post/editPage";
 import ErrorPage from "@/pages/common/error/errorPage";
+import AuthModal from "@/components/common/authModal";
 
 const AppRoutes: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // 環境変数から認証の必要性を判断
+    const requireAuth = process.env.REACT_APP_BASIC_AUTH === "true";
+    if (!requireAuth) {
+      setIsAuthenticated(true); // 認証不要の場合は直ちに認証済みとする
+      return;
+    }
+
+    const extraAuth = localStorage.getItem("extraAuth");
+    setIsAuthenticated(!!extraAuth);
+  }, []);
+
+  const handleAuthenticate = (username: string, password: string) => {
+    const adminUser = process.env.REACT_APP_BASIC_AUTH_USER;
+    const adminPassword = process.env.REACT_APP_BASIC_AUTH_PASSWORD;
+
+    if (username === adminUser && password === adminPassword) {
+      localStorage.setItem("extraAuth", "true");
+      setIsAuthenticated(true);
+    } else {
+      alert("誤った認証情報です。");
+    }
+  };
+
+  if (!isAuthenticated) {
+    return <AuthModal show={true} onAuthenticate={handleAuthenticate} />;
+  }
+
   return (
     <Router>
       <Header />
