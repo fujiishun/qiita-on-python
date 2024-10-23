@@ -40,17 +40,25 @@ https://qiita.com/nonamenme/items/43243586c81cbbb9b08b
 
 ※以降は WSL 上で作業を行いたいため、VSCode 上のターミナル(CTRL+@)で作業を行うこと
 
+## スクリプトファイルへの権限付与
+
+WSL の場合、以下コマンドで権限の付与が必要
+
+```
+chmod +x backend/entrypoint.sh
+```
+
 ## qiita_django 起動
 
 ```
-docker-compose up --build -d
+docker compose build
+docker compose up -d
 ```
 
-※コンテナ起動後、ブラウザで http://localhost:3000 へアクセス。以下の DB 設定手順へ続く
+※コンテナ起動後、ブラウザで http://localhost へアクセス
 
 ## データ&マッパー準備
 
-DB にデータが存在しないため、Migrate する必要があります
 Migrate 作成コマンド
 
 ```
