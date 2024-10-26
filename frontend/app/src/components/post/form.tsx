@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Container, Card } from "react-bootstrap";
+import ReactMarkdown from "react-markdown";
+import MdEditor from "react-markdown-editor-lite";
+import "react-markdown-editor-lite/lib/index.css";
 
 import Alert from "@/components/common/error/alert";
 import { PostData } from "@/types/post";
@@ -31,6 +34,10 @@ const PostForm: React.FC<PostFormProps> = ({
     return true;
   };
 
+  const handleEditorChange = ({ text }: any) => {
+    setLocalBody(text);
+  };
+
   return (
     <Container>
       <div className="my-2">
@@ -52,12 +59,11 @@ const PostForm: React.FC<PostFormProps> = ({
           </Form.Group>
           <Form.Group>
             <Form.Label>内容</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={20}
+            <MdEditor
               value={localBody}
-              onChange={(e) => setLocalBody(e.target.value)}
-              required
+              style={{ height: "500px" }}
+              renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
+              onChange={handleEditorChange}
             />
           </Form.Group>
           <div className="text-right mt-3">

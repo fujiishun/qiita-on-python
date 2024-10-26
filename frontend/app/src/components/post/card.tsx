@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Button, Badge, Spinner, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 import { Post } from "@/types/global";
 import { buildUserDetailPagePath } from "@/utils/buildPath";
@@ -43,7 +44,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, onEdit }) => {
             <Card.Subtitle>{post.authorName}</Card.Subtitle>
           </Link>
           <div className="d-flex justify-content-between">
-            <Card.Text className="small text-muted mb-4">
+            <Card.Text className="small text-muted mb-1">
               投稿日:
               {post.postedAt ? post.postedAt : "-"}
               {post.reWrittenAt && `｜更新日: ${post.reWrittenAt}`}
@@ -72,8 +73,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, onEdit }) => {
               )}
             </div>
           </div>
-          <Card.Title>{post.title}</Card.Title>
-          <Card.Text style={{ whiteSpace: "pre-wrap" }}>{post.body}</Card.Text>
+          <Card.Title className="display-6 mb-4 fw-bold">
+            {post.title}
+          </Card.Title>
+          <Card.Text style={{ whiteSpace: "pre-wrap" }}>
+            <ReactMarkdown>{post.body}</ReactMarkdown>
+          </Card.Text>
           <Modal
             show={showModal}
             onHide={handleCloseModal}
